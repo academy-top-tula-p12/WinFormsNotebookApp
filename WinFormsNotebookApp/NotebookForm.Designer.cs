@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NotebookForm));
             openFileDialog = new OpenFileDialog();
             saveFileDialog = new SaveFileDialog();
             fontDialog = new FontDialog();
@@ -36,6 +37,7 @@
             fileMenuItem = new ToolStripMenuItem();
             fileCreateMenuItem = new ToolStripMenuItem();
             fileOpenMenuItem = new ToolStripMenuItem();
+            fileCloseMenuItem = new ToolStripMenuItem();
             fileSaveMenuItem = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripSeparator();
             quitMenuItem = new ToolStripMenuItem();
@@ -43,12 +45,15 @@
             formatFontMenuItem = new ToolStripMenuItem();
             formatColorMenuItem = new ToolStripMenuItem();
             mainToolsStrip = new ToolStrip();
+            fileCreateToolItem = new ToolStripButton();
             mainStatusStrip = new StatusStrip();
+            rowStatusItem = new ToolStripStatusLabel();
             tabPage1 = new TabPage();
             txtEdit = new TextBox();
             editTabControl = new TabControl();
-            fileCloseMenuItem = new ToolStripMenuItem();
             mainMenuStrip.SuspendLayout();
+            mainToolsStrip.SuspendLayout();
+            mainStatusStrip.SuspendLayout();
             tabPage1.SuspendLayout();
             SuspendLayout();
             // 
@@ -74,33 +79,44 @@
             // fileCreateMenuItem
             // 
             fileCreateMenuItem.Name = "fileCreateMenuItem";
-            fileCreateMenuItem.Size = new Size(180, 22);
+            fileCreateMenuItem.ShortcutKeys = Keys.Control | Keys.N;
+            fileCreateMenuItem.Size = new Size(173, 22);
             fileCreateMenuItem.Text = "Создать";
             fileCreateMenuItem.Click += fileCreateMenuItem_Click;
             // 
             // fileOpenMenuItem
             // 
             fileOpenMenuItem.Name = "fileOpenMenuItem";
-            fileOpenMenuItem.Size = new Size(180, 22);
+            fileOpenMenuItem.ShortcutKeys = Keys.Control | Keys.O;
+            fileOpenMenuItem.Size = new Size(173, 22);
             fileOpenMenuItem.Text = "Открыть";
             fileOpenMenuItem.Click += fileOpenMenuItem_Click;
+            // 
+            // fileCloseMenuItem
+            // 
+            fileCloseMenuItem.Image = (Image)resources.GetObject("fileCloseMenuItem.Image");
+            fileCloseMenuItem.Name = "fileCloseMenuItem";
+            fileCloseMenuItem.Size = new Size(173, 22);
+            fileCloseMenuItem.Text = "Закрыть";
+            fileCloseMenuItem.Click += fileCloseMenuItem_Click;
             // 
             // fileSaveMenuItem
             // 
             fileSaveMenuItem.Name = "fileSaveMenuItem";
-            fileSaveMenuItem.Size = new Size(180, 22);
+            fileSaveMenuItem.ShortcutKeys = Keys.Control | Keys.S;
+            fileSaveMenuItem.Size = new Size(173, 22);
             fileSaveMenuItem.Text = "Сохранить";
             fileSaveMenuItem.Click += fileSaveMenuItem_Click;
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(177, 6);
+            toolStripMenuItem1.Size = new Size(170, 6);
             // 
             // quitMenuItem
             // 
             quitMenuItem.Name = "quitMenuItem";
-            quitMenuItem.Size = new Size(180, 22);
+            quitMenuItem.Size = new Size(173, 22);
             quitMenuItem.Text = "Выход";
             // 
             // formatMenuItem
@@ -126,17 +142,33 @@
             // 
             // mainToolsStrip
             // 
+            mainToolsStrip.Items.AddRange(new ToolStripItem[] { fileCreateToolItem });
             mainToolsStrip.Location = new Point(0, 24);
             mainToolsStrip.Name = "mainToolsStrip";
             mainToolsStrip.Size = new Size(803, 25);
             mainToolsStrip.TabIndex = 4;
             // 
+            // fileCreateToolItem
+            // 
+            fileCreateToolItem.Image = (Image)resources.GetObject("fileCreateToolItem.Image");
+            fileCreateToolItem.ImageTransparentColor = Color.Magenta;
+            fileCreateToolItem.Name = "fileCreateToolItem";
+            fileCreateToolItem.Size = new Size(70, 22);
+            fileCreateToolItem.Text = "Создать";
+            fileCreateToolItem.Click += fileCreateMenuItem_Click;
+            // 
             // mainStatusStrip
             // 
+            mainStatusStrip.Items.AddRange(new ToolStripItem[] { rowStatusItem });
             mainStatusStrip.Location = new Point(0, 518);
             mainStatusStrip.Name = "mainStatusStrip";
             mainStatusStrip.Size = new Size(803, 22);
             mainStatusStrip.TabIndex = 5;
+            // 
+            // rowStatusItem
+            // 
+            rowStatusItem.Name = "rowStatusItem";
+            rowStatusItem.Size = new Size(0, 17);
             // 
             // tabPage1
             // 
@@ -167,13 +199,6 @@
             editTabControl.Size = new Size(803, 469);
             editTabControl.TabIndex = 6;
             // 
-            // fileCloseMenuItem
-            // 
-            fileCloseMenuItem.Name = "fileCloseMenuItem";
-            fileCloseMenuItem.Size = new Size(180, 22);
-            fileCloseMenuItem.Text = "Закрыть";
-            fileCloseMenuItem.Click += fileCloseMenuItem_Click;
-            // 
             // NotebookForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -186,8 +211,13 @@
             MainMenuStrip = mainMenuStrip;
             Name = "NotebookForm";
             Text = "Блокнот";
+            FormClosing += NotebookForm_FormClosing;
             mainMenuStrip.ResumeLayout(false);
             mainMenuStrip.PerformLayout();
+            mainToolsStrip.ResumeLayout(false);
+            mainToolsStrip.PerformLayout();
+            mainStatusStrip.ResumeLayout(false);
+            mainStatusStrip.PerformLayout();
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
             ResumeLayout(false);
@@ -215,5 +245,7 @@
         private TextBox txtEdit;
         private TabControl editTabControl;
         private ToolStripMenuItem fileCloseMenuItem;
+        private ToolStripButton fileCreateToolItem;
+        private ToolStripStatusLabel rowStatusItem;
     }
 }

@@ -11,8 +11,11 @@ namespace WinFormsNotebookApp
     {
         public TabPage? Page { get; private set; }
         public System.Windows.Forms.TextBox EditBox { get; private set; }
+
         public string FileName { get; set; } = "";
+
         public bool IsSave { get; set; } = true;
+        public bool IsNew { get; set; } = true;
         
         public TabDocument(TabPage page, System.Windows.Forms.TextBox editBox)
         {

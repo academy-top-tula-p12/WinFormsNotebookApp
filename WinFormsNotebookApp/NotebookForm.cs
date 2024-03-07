@@ -18,7 +18,7 @@ namespace WinFormsNotebookApp
             saveFileDialog.AddExtension = true;
             saveFileDialog.InitialDirectory = @"D:/RPO";
 
-            saveFileDialog.CreatePrompt = true;
+            saveFileDialog.CreatePrompt = false;
             saveFileDialog.OverwritePrompt = false;
 
             fontDialog.ShowColor = true;
@@ -26,13 +26,14 @@ namespace WinFormsNotebookApp
             colorDialog.FullOpen = true;
             colorDialog.SolidColorOnly = true;
 
+            rowStatusItem.Text = "Строка: 2";
+
             CreateTabDocumnet();
         }
 
         private void fileCreateMenuItem_Click(object sender, EventArgs e)
         {
-            TabDocument tabDoc = CreateTabDocumnet();
-
+            CreateTabDocumnet();
         }
 
         private void fileOpenMenuItem_Click(object sender, EventArgs e)
@@ -44,18 +45,43 @@ namespace WinFormsNotebookApp
 
             TabDocument tabDoc = CreateTabDocumnet(fileName.Remove(0, fileName.LastIndexOf("\\") + 1));
             tabDoc.FileName = fileName;
+            tabDoc.IsNew = false;
 
             var text = File.ReadAllText(fileName);
             tabDoc.EditBox.Text = text;
+            tabDoc.Page.Text = fileName.Remove(0, fileName.LastIndexOf("\\") + 1);
+            tabDoc.IsSave = true;
         }
 
         private void fileSaveMenuItem_Click(object sender, EventArgs e)
         {
-            if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
-                return;
+            TabDocument docCurrent = CurrentDocument();
+            if (docCurrent.IsSave) return;
 
-            string fileName = saveFileDialog.FileName;
-            File.WriteAllText(fileName, txtEdit.Text);
+            string fileName;
+
+            if (docCurrent.IsNew)
+            {
+                if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
+                    return;
+                fileName = saveFileDialog.FileName;
+            }
+            else
+                fileName = docCurrent.FileName;
+
+            File.WriteAllText(fileName, docCurrent.EditBox.Text);
+
+            if (docCurrent.IsNew)
+            {
+                docCurrent.FileName = fileName;
+                docCurrent.Page.Text = fileName.Remove(0, fileName.LastIndexOf("\\") + 1);
+                docCurrent.IsNew = false;
+            }
+            else
+            {
+                docCurrent.Page.Text = docCurrent.Page.Text.Remove(docCurrent.Page.Text.Length - 2);
+            }
+            docCurrent.IsSave = true;
         }
 
         private void formatFontMenuItem_Click(object sender, EventArgs e)
@@ -91,6 +117,7 @@ namespace WinFormsNotebookApp
             editBox.Multiline = true;
             editBox.Dock = DockStyle.Fill;
             editBox.TextChanged += editBox_TextChanged;
+            //editBox.Click += editBox_Click;
 
             tabPage.Controls.Add(editBox);
 
@@ -104,9 +131,16 @@ namespace WinFormsNotebookApp
             return tabDoc;
         }
 
+        private void editBox_Click(object? sender, EventArgs e)
+        {
+            MessageBox.Show(((TextBox)sender).SelectionStart.ToString());
+        }
+
         private void editBox_TextChanged(object? sender, EventArgs e)
         {
             TabDocument docCurrent = CurrentDocument();
+            if (docCurrent.IsSave)
+                docCurrent.Page.Text += " *";
             docCurrent.IsSave = false;
         }
 
@@ -114,7 +148,7 @@ namespace WinFormsNotebookApp
         {
             TabDocument? docCurrent = CurrentDocument();
 
-            if(!docCurrent.IsSave)
+            if (!docCurrent.IsSave)
             {
                 var result = MessageBox.Show
                     ("Файл не сохранен. Сохранить?",
@@ -122,14 +156,19 @@ namespace WinFormsNotebookApp
                     MessageBoxButtons.YesNoCancel,
                     MessageBoxIcon.Warning);
 
-                if ( result == DialogResult.Cancel)
+                if (result == DialogResult.Cancel)
                     return;
-                else if ( result == DialogResult.Yes )
+                else if (result == DialogResult.Yes)
                 {
-                    if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
-                        return;
-
-                    string fileName = saveFileDialog.FileName;
+                    string fileName;
+                    if (docCurrent.IsNew)
+                    {
+                        if (saveFileDialog.ShowDialog() == DialogResult.Cancel)
+                            return;
+                        fileName = saveFileDialog.FileName;
+                    }
+                    else
+                        fileName = docCurrent.FileName;
                     File.WriteAllText(fileName, docCurrent.EditBox.Text);
                 }
             }
@@ -143,6 +182,15 @@ namespace WinFormsNotebookApp
             TabPage? pageCurrent = editTabControl.SelectedTab;
             TabDocument? docCurrent = tabDocs.FirstOrDefault(d => d.Page == pageCurrent);
             return docCurrent;
+        }
+
+        private void NotebookForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            foreach(var d in  tabDocs)
+            {
+                if (!d.IsSave)
+                    fileSaveMenuItem_Click(null, null);
+            }
         }
     }
 }
