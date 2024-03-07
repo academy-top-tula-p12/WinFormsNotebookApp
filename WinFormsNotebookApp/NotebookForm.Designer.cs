@@ -47,9 +47,9 @@
             tabPage1 = new TabPage();
             txtEdit = new TextBox();
             editTabControl = new TabControl();
+            fileCloseMenuItem = new ToolStripMenuItem();
             mainMenuStrip.SuspendLayout();
             tabPage1.SuspendLayout();
-            editTabControl.SuspendLayout();
             SuspendLayout();
             // 
             // openFileDialog
@@ -66,7 +66,7 @@
             // 
             // fileMenuItem
             // 
-            fileMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fileCreateMenuItem, fileOpenMenuItem, fileSaveMenuItem, toolStripMenuItem1, quitMenuItem });
+            fileMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fileCreateMenuItem, fileOpenMenuItem, fileCloseMenuItem, fileSaveMenuItem, toolStripMenuItem1, quitMenuItem });
             fileMenuItem.Name = "fileMenuItem";
             fileMenuItem.Size = new Size(48, 20);
             fileMenuItem.Text = "Файл";
@@ -74,33 +74,33 @@
             // fileCreateMenuItem
             // 
             fileCreateMenuItem.Name = "fileCreateMenuItem";
-            fileCreateMenuItem.Size = new Size(133, 22);
+            fileCreateMenuItem.Size = new Size(180, 22);
             fileCreateMenuItem.Text = "Создать";
             fileCreateMenuItem.Click += fileCreateMenuItem_Click;
             // 
             // fileOpenMenuItem
             // 
             fileOpenMenuItem.Name = "fileOpenMenuItem";
-            fileOpenMenuItem.Size = new Size(133, 22);
+            fileOpenMenuItem.Size = new Size(180, 22);
             fileOpenMenuItem.Text = "Открыть";
             fileOpenMenuItem.Click += fileOpenMenuItem_Click;
             // 
             // fileSaveMenuItem
             // 
             fileSaveMenuItem.Name = "fileSaveMenuItem";
-            fileSaveMenuItem.Size = new Size(133, 22);
+            fileSaveMenuItem.Size = new Size(180, 22);
             fileSaveMenuItem.Text = "Сохранить";
             fileSaveMenuItem.Click += fileSaveMenuItem_Click;
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(130, 6);
+            toolStripMenuItem1.Size = new Size(177, 6);
             // 
             // quitMenuItem
             // 
             quitMenuItem.Name = "quitMenuItem";
-            quitMenuItem.Size = new Size(133, 22);
+            quitMenuItem.Size = new Size(180, 22);
             quitMenuItem.Text = "Выход";
             // 
             // formatMenuItem
@@ -141,7 +141,7 @@
             // tabPage1
             // 
             tabPage1.Controls.Add(txtEdit);
-            tabPage1.Location = new Point(4, 24);
+            tabPage1.Location = new Point(0, 0);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
             tabPage1.Size = new Size(795, 441);
@@ -160,13 +160,19 @@
             // 
             // editTabControl
             // 
-            editTabControl.Controls.Add(tabPage1);
             editTabControl.Dock = DockStyle.Fill;
             editTabControl.Location = new Point(0, 49);
             editTabControl.Name = "editTabControl";
             editTabControl.SelectedIndex = 0;
             editTabControl.Size = new Size(803, 469);
             editTabControl.TabIndex = 6;
+            // 
+            // fileCloseMenuItem
+            // 
+            fileCloseMenuItem.Name = "fileCloseMenuItem";
+            fileCloseMenuItem.Size = new Size(180, 22);
+            fileCloseMenuItem.Text = "Закрыть";
+            fileCloseMenuItem.Click += fileCloseMenuItem_Click;
             // 
             // NotebookForm
             // 
@@ -184,7 +190,6 @@
             mainMenuStrip.PerformLayout();
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
-            editTabControl.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -209,5 +214,6 @@
         private TabPage tabPage1;
         private TextBox txtEdit;
         private TabControl editTabControl;
+        private ToolStripMenuItem fileCloseMenuItem;
     }
 }
